@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
-
 class QRCreatePage extends StatefulWidget {
   @override
   _QRCreatePageState createState() => _QRCreatePageState();
@@ -10,6 +9,7 @@ class QRCreatePage extends StatefulWidget {
 
 class _QRCreatePageState extends State<QRCreatePage> {
   final controller = TextEditingController();
+
   // final GlobalKey globalKey = new GlobalKey();
 
   @override
@@ -33,7 +33,7 @@ class _QRCreatePageState extends State<QRCreatePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  padding: const EdgeInsets.all(30),
+                  padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
                     color: Color(0xFF1139a0),
                     borderRadius: BorderRadius.circular(15),
@@ -89,24 +89,24 @@ class _QRCreatePageState extends State<QRCreatePage> {
     );
   }
 
-  // Future<void> _captureAndSharePng() async {
-  //   try {
-  //     RenderRepaintBoundary? boundary = globalKey.currentContext!
-  //         .findRenderObject() as RenderRepaintBoundary?;
-  //     var image = await boundary!.toImage();
-  //     ByteData? byteData = await image.toByteData(format: ImageByteFormat.png);
-  //     Uint8List pngBytes = byteData!.buffer.asUint8List();
-  //
-  //     final tempDir = await getTemporaryDirectory();
-  //     final file = await new File('${tempDir.path}/image.png').create();
-  //     await file.writeAsBytes(pngBytes);
-  //
-  //     await FlutterShare.shareFile(
-  //         title: controller.text,
-  //         filePath: file.path.toString(),
-  //         fileType: 'image/png');
-  //   } catch (e) {
-  //     print(e.toString());
-  //   }
-  // }
+// Future<void> _captureAndSharePng() async {
+//   try {
+//     RenderRepaintBoundary? boundary = globalKey.currentContext!
+//         .findRenderObject() as RenderRepaintBoundary?;
+//     var image = await boundary!.toImage();
+//     ByteData? byteData = await image.toByteData(format: ImageByteFormat.png);
+//     Uint8List pngBytes = byteData!.buffer.asUint8List();
+//
+//     final tempDir = await getTemporaryDirectory();
+//     final file = await new File('${tempDir.path}/image.png').create();
+//     await file.writeAsBytes(pngBytes);
+//
+//     await FlutterShare.shareFile(
+//         title: controller.text,
+//         filePath: file.path.toString(),
+//         fileType: 'image/png');
+//   } catch (e) {
+//     print(e.toString());
+//   }
+// }
 }

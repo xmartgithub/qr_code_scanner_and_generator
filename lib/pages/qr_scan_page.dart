@@ -85,9 +85,6 @@ class _QRScanPageState extends State<QRScanPage> {
         if (barcode != null) {
           if (barcode!.code.startsWith('http') ||
               barcode!.code.startsWith('https')) {
-            print("##################################"
-                "${barcode!.code.toString()}"
-                "######################################");
             _launchURL(barcode!.code.toString());
           } else {
             FlutterClipboard.copy(barcode!.code.toString());

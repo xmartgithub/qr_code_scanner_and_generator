@@ -5,8 +5,8 @@ import 'package:qr_code_scanner_and_generator/bottom_nav_bar.dart';
 
 void main() {
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-    statusBarColor: Color(0xff1139a0),
-    statusBarIconBrightness: Brightness.light,
+    statusBarColor: Colors.transparent,
+    statusBarIconBrightness: Brightness.dark,
   ));
   runApp(MyApp());
 }
