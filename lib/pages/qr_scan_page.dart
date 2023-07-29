@@ -1,9 +1,10 @@
-import 'package:clipboard/clipboard.dart';
-import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'dart:io';
 
+import 'package:flutter/material.dart';
+
+import 'package:clipboard/clipboard.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class QRScanPage extends StatefulWidget {
@@ -12,14 +13,14 @@ class QRScanPage extends StatefulWidget {
 }
 
 class _QRScanPageState extends State<QRScanPage> {
-  final qrKey = GlobalKey(debugLabel: 'QR');
+  final _qrKey = GlobalKey(debugLabel: 'QR');
 
-  late QRViewController controller;
-  Barcode? barcode;
+  late QRViewController _controller;
+  Barcode? _barcode;
 
   @override
   void dispose() {
-    controller.dispose();
+    _controller.dispose();
     super.dispose();
   }
 
@@ -28,37 +29,34 @@ class _QRScanPageState extends State<QRScanPage> {
     super.reassemble();
 
     if (Platform.isAndroid) {
-      await controller.pauseCamera();
+      await _controller.pauseCamera();
     }
-    controller.resumeCamera();
+    _controller.resumeCamera();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          "QR Code Scanner",
-          style: TextStyle(color: Colors.white,),),
-        elevation: 0.0,
-        backgroundColor: Color(0xFF1139a0),
+        title: Text("QR Code Scanner"),
       ),
       body: Stack(
         alignment: Alignment.center,
         children: <Widget>[
-          buildQrView(context),
+          _buildQrView(context),
           Positioned(
             bottom: 10,
-            child: buildResult(),
+            width: MediaQuery.sizeOf(context).width * 0.8,
+            child: _buildResult(),
           )
         ],
       ),
     );
   }
 
-  Widget buildQrView(BuildContext context) => QRView(
-        key: qrKey,
-        onQRViewCreated: onQRViewCreated,
+  Widget _buildQrView(BuildContext context) => QRView(
+        key: _qrKey,
+        onQRViewCreated: _onQRViewCreated,
         overlay: QrScannerOverlayShape(
           cutOutSize: MediaQuery.of(context).size.width * 0.8,
           borderWidth: 10,
@@ -67,65 +65,68 @@ class _QRScanPageState extends State<QRScanPage> {
         ),
       );
 
-  void onQRViewCreated(QRViewController controller) {
+  void _onQRViewCreated(QRViewController controller) {
     setState(() {
-      this.controller = controller;
+      this._controller = controller;
     });
 
     controller.scannedDataStream.listen((barcode) {
       setState(() {
-        this.barcode = barcode;
+        this._barcode = barcode;
       });
     });
   }
 
-  Widget buildResult() {
+  Widget _buildResult() {
     return InkWell(
       onTap: () {
-        if (barcode != null) {
-          if (barcode!.code.startsWith('http') ||
-              barcode!.code.startsWith('https')) {
-            _launchURL(barcode!.code.toString());
+        if (_barcode != null && _barcode!.code != null) {
+          if (_isLink()) {
+            _launchURL(_barcode!.code.toString());
           } else {
-            FlutterClipboard.copy(barcode!.code.toString());
+            FlutterClipboard.copy(_barcode!.code.toString());
             Fluttertoast.showToast(
-                msg: "Copied",
-                toastLength: Toast.LENGTH_SHORT,
-                gravity: ToastGravity.CENTER,
-                backgroundColor: Colors.red,
-                textColor: Colors.white,
-                fontSize: 16.0);
+              msg: "Copied",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              backgroundColor: Colors.red,
+              textColor: Colors.white,
+              fontSize: 16.0,
+            );
           }
         }
       },
-      child: Padding(
-        padding: const EdgeInsets.only(
-          left: 24.0,
-          right: 24.0,
+      child: Container(
+        padding: EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          color: Colors.white24,
         ),
-        child: Container(
-          padding: EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
-            color: Colors.white24,
+        child: Text(
+          _barcode != null
+              ? '${_isLink() ? "Tap to Launch in Browser:\n" : "Tap to Copy:"} ${_barcode!.code}'
+              : 'Scan a code!',
+          style: TextStyle(
+            color: Colors.white,
           ),
-          child: Text(
-            this.barcode != null ? 'Result : ${barcode!.code}' : 'Scan a code!',
-            style: TextStyle(
-              color: Colors.white,
-            ),
-            maxLines: 3,
-          ),
+          maxLines: 8,
+          textAlign: TextAlign.center,
+          overflow: TextOverflow.ellipsis,
         ),
       ),
     );
   }
 
+  bool _isLink() {
+    return _barcode!.code!.startsWith('http') ||
+        _barcode!.code!.startsWith('https');
+  }
+
   Future<void> _launchURL(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
+    try {
+      await launchUrl(Uri.parse(url));
+    } catch (e) {
+      print("URL NOT VALID $e");
     }
   }
 }

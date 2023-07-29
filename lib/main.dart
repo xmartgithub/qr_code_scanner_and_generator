@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:qr_code_scanner_and_generator/bottom_nav_bar.dart';
@@ -22,7 +21,10 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'QR Code Scanner and Generator',
-      theme: ThemeData.light(),
+      theme: ThemeData(
+        useMaterial3: true,
+        colorSchemeSeed: Color(0xFF1139a0),
+      ),
       home: MyNavBar(),
     );
   }

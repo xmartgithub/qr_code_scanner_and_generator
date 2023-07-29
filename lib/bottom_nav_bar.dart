@@ -19,26 +19,20 @@ class _MyNavBarState extends State<MyNavBar> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: listOfPages[currentIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Color(0xFF1139a0),
-        currentIndex: currentIndex,
-        selectedItemColor: Colors.white,
-        selectedLabelStyle: TextStyle(
-          color: Colors.white,
-          letterSpacing: 1,
-        ),
-        onTap: (index) {
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: currentIndex,
+        onDestinationSelected: (index) {
           setState(() {
             currentIndex = index;
           });
         },
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.qr_code, color: Colors.white),
+        destinations: [
+          NavigationDestination(
+            icon: Icon(Icons.qr_code),
             label: 'Generator',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.qr_code_scanner, color: Colors.white),
+          NavigationDestination(
+            icon: Icon(Icons.qr_code_scanner),
             label: 'Scanner',
           ),
         ],
