@@ -3,7 +3,7 @@ description: A QR Code Scanner and QR Code Generator build using flutter.
 
 publish_to: "none"
 
-version: 2.0.1+2001
+version: 2.0.2+2002
 
 environment:
   sdk: ">=3.0.5 <4.0.0"
