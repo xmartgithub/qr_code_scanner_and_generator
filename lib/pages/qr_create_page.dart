@@ -107,14 +107,9 @@ class _QRCreatePageState extends State<QRCreatePage> {
     if (bytes != null) {
       try {
         final permissionStatus = await Permission.storage.status;
-        await Permission.storage.request();
 
         if (permissionStatus.isDenied) {
           await Permission.storage.request();
-
-          if (permissionStatus.isDenied) {
-            await openAppSettings();
-          }
         } else if (permissionStatus.isPermanentlyDenied) {
           await openAppSettings();
         } else {
